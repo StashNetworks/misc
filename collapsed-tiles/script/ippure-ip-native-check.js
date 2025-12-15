@@ -7,12 +7,20 @@ async function request(method, params) {
   });
 }
 
+function isChinese() {
+  const lang = ($environment.language || "").toLowerCase();
+  return lang.startsWith("zh");
+}
+
 async function main() {
   const url = "https://my.ippure.com/v1/info";
   const { error, response, data } = await request("GET", url);
 
   if (error || !data) {
-    $done({ content: "Network Error", backgroundColor: "#C44" });
+    $done({
+      content: isChinese() ? "网络错误" : "Network Error",
+      backgroundColor: "#C44",
+    });
     return;
   }
 
@@ -20,15 +28,24 @@ async function main() {
   try {
     json = JSON.parse(data);
   } catch {
-    $done({ content: "Invalid JSON", backgroundColor: "#C44" });
+    $done({
+      content: isChinese() ? "无效 JSON" : "Invalid JSON",
+      backgroundColor: "#C44",
+    });
     return;
   }
 
   const isRes = Boolean(json.isResidential);
   const isBrd = Boolean(json.isBroadcast);
 
-  const resText = isRes ? "Residential" : "DC";
-  const brdText = isBrd ? "Broadcast" : "Native";
+  // 中英文文本
+  const resText = isChinese()
+    ? (isRes ? "住宅" : "机房")
+    : (isRes ? "Residential" : "DC");
+
+  const brdText = isChinese()
+    ? (isBrd ? "广播" : "原生")
+    : (isBrd ? "Broadcast" : "Native");
 
   // 颜色：绿 优 → 黄 中 → 红 差
   let color = "#88A788"; // 绿
@@ -39,8 +56,10 @@ async function main() {
     color = "#C44"; // 红
   }
 
+  const separator = " • ";
+
   $done({
-    content: `${resText} • ${brdText}`,
+    content: `${resText}${separator}${brdText}`,
     backgroundColor: color,
   });
 }
@@ -49,6 +68,9 @@ async function main() {
   try {
     await main();
   } catch {
-    $done({ content: "Script Error", backgroundColor: "#C44" });
+    $done({
+      content: isChinese() ? "脚本错误" : "Script Error",
+      backgroundColor: "#C44",
+    });
   }
 })();
