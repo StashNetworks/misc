@@ -23,7 +23,10 @@ tiles:
 script-providers:
   IPPure-IP-Info:
     url: https://fastly.jsdelivr.net/gh/StashNetworks/misc@main/collapsed-tiles/script/ippure-ip-info.js
+    path: ippure/ip-info.js
   IPPure-IP-Fraud-Score:
     url: https://fastly.jsdelivr.net/gh/StashNetworks/misc@main/collapsed-tiles/script/ippure-ip-fraud-score.js
+    path: ippure/ip-fraud-score.js
   IPPure-IP-Native-Check:
     url: https://fastly.jsdelivr.net/gh/StashNetworks/misc@main/collapsed-tiles/script/ippure-ip-native-check.js
+    path: ippure/ip-native-check.js
